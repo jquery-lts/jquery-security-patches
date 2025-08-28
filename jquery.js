@@ -1,6 +1,6 @@
 (function(){
 /*
- * jQuery 1.2.7-sec - New Wave Javascript
+ * jQuery-LTS 1.2.7 - New Wave Javascript
  *
  * Copyright (c) 2008 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -85,7 +85,7 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	// The current version of jQuery being used
-	jquery: "1.2.7-sec",
+	jquery: "1.2.7",
 
 	// The number of elements contained in the matched element set
 	size: function() {

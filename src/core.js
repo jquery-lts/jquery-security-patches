@@ -1,5 +1,5 @@
 /*
- * jQuery @VERSION - New Wave Javascript
+ * jQuery-LTS @VERSION - New Wave Javascript
  *
  * Copyright (c) 2008 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
