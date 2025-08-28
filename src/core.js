@@ -1,5 +1,5 @@
 /*
- * jQuery @VERSION - New Wave Javascript
+ * jQuery-LTS @VERSION - New Wave Javascript
  *
  * Copyright (c) 2008 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -20,8 +20,9 @@ var jQuery = window.jQuery = window.$ = function( selector, context ) {
 };
 
 // A simple way to check for HTML strings or ID strings
-// (both of which we optimize for)
-var quickExpr = /^[^<]*(<(.|\s)+>)[^>]*$|^#(\w+)$/,
+// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+// Strict HTML recognition (#11290: must start with <)
+var quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 // Is it a simple selector
 	isSimple = /^.[^:#\[\.]*$/,
@@ -54,13 +55,13 @@ jQuery.fn = jQuery.prototype = {
 
 				// HANDLE: $("#id")
 				else {
-					var elem = document.getElementById( match[3] );
+					var elem = document.getElementById( match[2] );
 
 					// Make sure an element was located
 					if ( elem ){
 						// Handle the case where IE and Opera return items
 						// by name instead of ID
-						if ( elem.id != match[3] )
+						if ( elem.id != match[2] )
 							return jQuery().find( selector );
 
 						// Otherwise, we inject the element directly into the jQuery object
@@ -575,8 +576,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 			for ( var name in options ) {
 				var src = target[ name ], copy = options[ name ];
 
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
-				if ( target === copy )
+				if ( name === "__proto__" || target === copy )
 					continue;
 
 				// Recurse if we're merging object values
@@ -951,21 +953,10 @@ jQuery.extend({
 
 			// Convert html string into DOM nodes
 			if ( typeof elem == "string" ) {
-				// Fix "XHTML"-style tags in all browsers
-				elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag){
-					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
-						all :
-						front + "></" + tag + ">";
-				});
-
 				// Trim whitespace, otherwise indexOf won't work as expected
 				var tags = jQuery.trim( elem ).toLowerCase(), div = context.createElement("div");
 
 				var wrap =
-					// option or optgroup
-					!tags.indexOf("<opt") &&
-					[ 1, "<select multiple='multiple'>", "</select>" ] ||
-
 					!tags.indexOf("<leg") &&
 					[ 1, "<fieldset>", "</fieldset>" ] ||
 
